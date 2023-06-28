@@ -1,8 +1,9 @@
-FROM node:14-alpine
+FROM node:18-alpine
 WORKDIR /opt/app
-ADD package.json package-lock.json
+COPY package*.json ./
+RUN ls -al
 RUN npm install
-ADD . .
+COPY . .
 RUN npm run build
 RUN npm prune --production
 CMD ["node", "dist/main.js"]
