@@ -1,10 +1,23 @@
-version: '3'
+version: '3.1'
 services:
     top.api:
-        image: top-api:latest
+        image: top-api
         container_name: top-api
         restart: always
         ports:
             - 3000:3000
+        #        volumes:
+        #           - ./.env:/otp/app/.env # Укажите ту директорию которую вы выбрали в Dockerfile, в данном случае (WORKDIR /app)
+        env_file:
+            - .env # Specify the .env file to load environment variables from
+    mongo:
+        image: mongo:4.4.4
+        container_name: top-api-mongo # Это имя нужно использовать в .env файле как host (можете задать любое)
+        restart: always
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=admin
+            - MONGO_INITDB_ROOT_PASSWORD=admin
+        ports:
+            - 27019:27017 # Левый порт это порт на котором монго будет доступна на нашей машине, правый порт монги в контейнере, его и нужно использовать в .env файле как port
         volumes:
-            - ./.env:/opt/app/.env
+            - ./mongo-data:/data/db
